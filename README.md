@@ -1,5 +1,21 @@
 # Gerenciador de Tarefas JSF
 
+
+## Itens do Desafio Implementados
+
+Abaixo está o status de implementação dos itens solicitados para este projeto:
+
+* **a) Criar uma aplicação Java Web utilizando JavaServer Faces (JSF)** ✅
+* **b) Utilizar persistência em um banco de dados PostgreSQL.** ✅
+
+Itens opcionais (diferenciais):
+
+* **c) Utilizar JPA** ✅
+* **d) Utilizar testes de unidades** ❌ (PENDENTE)
+* **e) Publicar projeto no Heroku ou outro ambiente cloud.** ❌ (NÃO CONSEGUI PUBLICAR NO HEROKU AINDA)
+* **f) Outros diferenciais que julgar conveniente:** ❓ (Utilização do PrimeFaces seria o melhor diferencial para implementar).
+
+
 ## 1. Visão Geral do Projeto
 
 Este é um projeto de Gerenciador de Tarefas desenvolvido para demonstrar a criação de uma aplicação web CRUD (Create, Read, Update, Delete) utilizando JavaServer Faces (JSF) como framework MVC, Java Persistence API (JPA) com Hibernate como provedor de persistência, e PostgreSQL como sistema de gerenciamento de banco de dados.
@@ -60,19 +76,32 @@ Siga os passos abaixo para configurar e executar o projeto em seu ambiente local
     CREATE DATABASE gerenciador_tarefas_db;
     ```
 2.  **Crie um Usuário (Recomendado):**
-    Crie um usuário com permissões para acessar este
+    Crie um usuário com permissões para acessar este banco (ex: `tarefas_app_user`).
+    ```sql
+    CREATE USER tarefas_app_user WITH PASSWORD 'suaSenhaForte123';
+    GRANT ALL PRIVILEGES ON DATABASE gerenciador_tarefas_db TO tarefas_app_user;
+    ```
+3.  **Estrutura da Tabela `Tarefa`:**
+    O Hibernate pode ser configurado para criar ou atualizar as tabelas automaticamente (via `hibernate.hbm2ddl.auto` no `persistence.xml`). Se preferir criar manualmente, use um script SQL similar a este (ajuste os nomes e tipos conforme sua entidade `Tarefa.java`):
+    ```sql
+    -- Conecte-se ao banco 'gerenciador_tarefas_db'
+    CREATE TABLE IF NOT EXISTS tarefa (
+        id BIGSERIAL PRIMARY KEY,
+        titulo VARCHAR(255) NOT NULL,
+        descricao TEXT,
+        responsavel VARCHAR(150),
+        prioridade INTEGER,
+        situacao VARCHAR(50) DEFAULT 'Em Andamento',
+        deadline DATE
+    );
+    ```
 
+### 4.3. Configuração do Projeto
 
-## Itens do Desafio Implementados
+1.  **Clone/Baixe o Projeto:**
+    Obtenha os arquivos do projeto.
 
-Abaixo está o status de implementação dos itens solicitados para este projeto:
+2.  **Configure o `persistence.xml`:**
 
-* **a) Criar uma aplicação Java Web utilizando JavaServer Faces (JSF)** ✅
-* **b) Utilizar persistência em um banco de dados PostgreSQL.** ✅
+3.  **Verifique as Dependências (ex: `pom.xml`):**
 
-Itens opcionais (diferenciais):
-
-* **c) Utilizar JPA** ✅
-* **d) Utilizar testes de unidades** ❌ (PENDENTE)
-* **e) Publicar projeto no Heroku ou outro ambiente cloud.** ❌ (NÃO CONSEGUI PUBLICAR NO HEROKU AINDA)
-* **f) Outros diferenciais que julgar conveniente:** ❓ (Utilização do PrimeFaces seria o melhor diferencial para implementar).
