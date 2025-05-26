@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Gestão Tarefas</title>
+</h:head>
+<h:body>
+	<h1>TAREFAS DA SPRINT</h1>
+	 <h:form id="formTarefas">
+
+        <p:panelGroup layout="block" style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;">
+            <h:outputLabel for="filtroSituacao" value="Filtrar por Situação: " style="margin-right: 10px;"/>
+            <h:selectOneMenu id="filtroSituacao" value="#{tarefaBean.filtroSituacao}">
+                <f:selectItem itemValue="TODAS" itemLabel="Todas" />
+                <f:selectItem itemValue="Em Andamento" itemLabel="Em Andamento" /> <f:selectItem itemValue="Concluída" itemLabel="Concluídas" />    <f:ajax listener="#{tarefaBean.aplicarFiltro}" render="tabelaTarefas globalMessages" />
+            </h:selectOneMenu>
+        </p:panelGroup>
+        <h2>Lista de Tarefas</h2>
+        <h:dataTable id="tabelaTarefas" value="#{tarefaBean.tarefas}" var="t" border="1" cellpadding="5" style="width: 100%">
+            <h:column>
+                <f:facet name="header">Título</f:facet>
+                #{t.titulo}
+            </h:column>
+            <!--<h:column>
+                <f:facet name="header">Descrição</f:facet>
+                #{t.descricao}
+            </h:column> -->
+            <h:column>
+                <f:facet name="header">Responsável</f:facet>
+                #{t.responsavel}
+            </h:column>
+         <!--  <h:column>
+                <f:facet name="header">Prioridade</f:facet>
+                #{t.prioridade}
+            </h:column>-->
+            <h:column>... 
+                <f:facet name="header">Situação</f:facet>
+                #{t.situacao}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Deadline</f:facet>
+                <h:outputText value="#{t.deadline}">
+                    <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
+                </h:outputText>
+            </h:column>
+            <h:column>
+    <f:facet name="header">Ações</f:facet>
+    <h:commandButton value="Concluir" action="#{tarefaBean.concluirTarefaAction}"
+                     immediate="true"  style="margin-right: 5px;">
+        <f:setPropertyActionListener target="#{tarefaBean.tarefaSelecionada}" value="#{t}" />
+    </h:commandButton>
+    <h:commandButton value="Excluir" action="#{tarefaBean.excluirTarefaAction}"
+                     immediate="true" style="margin-right: 5px;">
+        <f:setPropertyActionListener target="#{tarefaBean.tarefaSelecionada}" value="#{t}" />
+    </h:commandButton>
+    <h:commandButton value="Editar" immediate="true" style="margin-right: 5px;">
+    <f:setPropertyActionListener target="#{tarefaBean.tarefa}" value="#{t}" />
+
+    <f:ajax render=":formTarefas:painelManterTarefa :formTarefas:globalMessages" />
+
+    </h:commandButton>
+</h:column>
+            
+        </h:dataTable>
+
+        <h3>Adicionar / Editar Tarefa</h3>
+        <h:panelGrid id="painelManterTarefa" columns="2" cellpadding="5">
+            <h:outputLabel for="titulo" value="Título:"/>
+            <h:inputText id="titulo" value="#{tarefaBean.tarefa.titulo}" required="true" label="Título"/>
+
+            <h:outputLabel for="descricao" value="Descrição:"/>
+            <h:inputTextarea id="descricao" value="#{tarefaBean.tarefa.descricao}" rows="3" cols="30" label="Descrição"/>
+
+            <h:outputLabel for="responsavel" value="Responsável:"/>
+            <h:inputText id="responsavel" value="#{tarefaBean.tarefa.responsavel}" label="Responsável"/>
+
+            <h:outputLabel for="prioridade" value="Prioridade:"/>
+            <h:inputText id="prioridade" value="#{tarefaBean.tarefa.prioridade}" label="Prioridade"/>
+
+            <h:outputLabel for="deadline" value="Deadline:"/>
+            <h:inputText id="deadline" value="#{tarefaBean.tarefa.deadline}" label="Deadline">
+                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
+            </h:inputText>
+
+            <h:outputLabel />
+            <h:panelGroup>
+                <h:commandButton value="Salvar" action="#{tarefaBean.salvar}">
+                     <f:ajax execute="@form" render=":formTarefas:tabelaTarefas :formTarefas:painelManterTarefa :formTarefas:globalMessages" />
+                </h:commandButton>
+                <h:commandButton value="Atualizar" action="#{tarefaBean.atualizarTarefa}" style="margin-left:5px;">
+                     <f:ajax execute="@form" render=":formTarefas:tabelaTarefas :formTarefas:painelManterTarefa :formTarefas:globalMessages" />
+                </h:commandButton>
+                <h:commandButton value="Limpar" action="#{tarefaBean.limparFormulario}" immediate="true" style="margin-left:5px;">
+                    <f:ajax render=":formTarefas:painelManterTarefa :formTarefas:globalMessages" />
+                </h:commandButton>
+            </h:panelGroup>
+        </h:panelGrid>
+
+    </h:form>
+</h:body>
+</html>
