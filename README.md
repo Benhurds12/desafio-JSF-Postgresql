@@ -61,3 +61,15 @@ Siga os passos abaixo para configurar e executar o projeto em seu ambiente local
     ```
 2.  **Crie um Usuário (Recomendado):**
     Crie um usuário com permissões para acessar este
+
+
+### Itens Solicitados 
+
+s itens:
+a) Criar uma aplicação Java Web utilizando JavaServer Faces (JSF) ✅ 
+b) Utilizar persistência em um banco de dados PostgreSQL. ✅ 
+Itens opcionais, mas que se feitos mostram um diferencial:
+c) Utilizar JPA ✅ 
+d) Utilizar testes de unidades ❌ (PENDENTE)
+e) Publicar projeto no heroku ou outro ambiente cloud. ❌ (NÃO CONSEGUI PUBLICAR NO HEROKO AINDA)
+f) outros diferenciais que julgar conveniente. ❓ Acho que usar o primefaces ou similar seria o principal upgrade.
