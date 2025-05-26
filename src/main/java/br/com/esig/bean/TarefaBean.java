@@ -61,7 +61,6 @@ public class TarefaBean implements Serializable {
     
     
     public void editar(Tarefa tarefaSelecionada) {
-        // Carrega a tarefa selecionada no objeto 'tarefa' do bean para edição
         this.tarefa = tarefaSelecionada;
     }
     
@@ -69,29 +68,22 @@ public class TarefaBean implements Serializable {
         String tituloNoFormulario = this.tarefa.getTitulo(); // Pega o título que veio do formulário
 
         if (tituloNoFormulario == null || tituloNoFormulario.trim().isEmpty()) {
-            // Adiciona mensagem de erro se o título estiver vazio
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Atenção!", "O título é obrigatório para tentar uma atualização."));
             return null;
         }
 
         try {
-            // Busca no banco uma tarefa que tenha EXATAMENTE este título
+           
             Tarefa tarefaExistenteNoBanco = this.tarefaDAO.buscarPorTitulo(tituloNoFormulario);
 
             if (tarefaExistenteNoBanco != null) {
-                // Encontrou uma tarefa com este título! Vamos atualizá-la.
-                // Copia os outros dados do formulário (this.tarefa) para a tarefaExistenteNoBanco.
-                // O ID de tarefaExistenteNoBanco é o que será usado para o UPDATE no banco.
+               
                 tarefaExistenteNoBanco.setDescricao(this.tarefa.getDescricao());
                 tarefaExistenteNoBanco.setResponsavel(this.tarefa.getResponsavel());
                 tarefaExistenteNoBanco.setPrioridade(this.tarefa.getPrioridade());
                 tarefaExistenteNoBanco.setDeadline(this.tarefa.getDeadline());
                 tarefaExistenteNoBanco.setSituacao(this.tarefa.getSituacao()); // Assumindo que situação pode ser editada
-                // Se o título foi alterado no formulário, e você quer que esse novo título seja salvo,
-                // a linha abaixo não é estritamente necessária se você buscou pelo título do formulário,
-                // mas não faz mal garantir:
-                // tarefaExistenteNoBanco.setTitulo(tituloNoFormulario);
-
+                
 
                 this.tarefaDAO.salvar(tarefaExistenteNoBanco); // O salvar do DAO fará merge/update
 
@@ -99,10 +91,9 @@ public class TarefaBean implements Serializable {
                 this.tarefa = new Tarefa(); // Limpa o formulário no bean
                 carregarTarefas();          // Recarrega a lista da tabela
             } else {
-                // Nenhuma tarefa encontrada com o título fornecido no formulário.
-                // O usuário pode ter digitado um título que não existe, ou alterado um título existente para um novo.
+                
                 FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Atenção!", "Nenhuma tarefa encontrada com o título '" + tituloNoFormulario + "' para atualizar. Para criar uma nova tarefa com este título, use o botão 'Salvar'."));
-                // O formulário manterá os dados digitados.
+                
             }
         } catch (Exception e) {
             // ... tratamento de erro ...
@@ -114,7 +105,7 @@ public class TarefaBean implements Serializable {
     
     public String salvar() {
         try {
-            // Verifica se é uma nova tarefa ANTES de salvar, pois o DAO pode atribuir um ID.
+            
             boolean isNew = (this.tarefa.getId() == null);
 
             this.tarefaDAO.salvar(this.tarefa); // O DAO já lida com persist (novo) ou merge (atualizar)
@@ -127,9 +118,7 @@ public class TarefaBean implements Serializable {
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", "Tarefa atualizada com sucesso."));
             }
 
-            // CRUCIAL: Limpa o objeto 'tarefa' do bean para a próxima operação.
-            // Isso garante que, se o usuário quiser adicionar uma nova tarefa em seguida,
-            // o formulário estará limpo e não tentará atualizar a tarefa editada anteriormente.
+           
             this.tarefa = new Tarefa();
 
             carregarTarefas(); // Recarrega a lista da tabela
@@ -141,7 +130,7 @@ public class TarefaBean implements Serializable {
         return null; 
     }
 
- // Método original com parâmetro (pode ser privado ou protected se quiser)
+ // Método original com parâmetro 
     private void executarConclusaoTarefa(Tarefa tarefaParaConcluir) {
         if (tarefaParaConcluir != null) {
             tarefaParaConcluir.setSituacao("Concluída");
@@ -210,10 +199,6 @@ public class TarefaBean implements Serializable {
 
     public List<Tarefa> getTarefas() {
         // Primeiro, garanta que a lista 'master' (this.tarefas) está carregada
-        // Se this.tarefas for null, pode ser um indicativo que carregarTarefas() não foi chamado
-        // ou o bean foi recriado (se for RequestScoped e esta for uma nova requisição sem ação prévia).
-        // Em um bean RequestScoped, this.tarefas será recarregado (com todas as tarefas)
-        // a cada requisição que chegar ao init() ou que chamar carregarTarefas().
         if (this.tarefas == null) {
              // System.out.println("getTarefas(): this.tarefas é null, tentando carregar...");
              // carregarTarefas(); // Chama o método que busca TODAS do DAO
