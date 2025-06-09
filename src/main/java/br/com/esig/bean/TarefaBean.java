@@ -154,7 +154,7 @@ public class TarefaBean implements Serializable {
             e.printStackTrace();
         }
         this.tarefaSelecionada = null; // Limpar seleção
-        return null;
+        return "Gestao.xhtml?faces-redirect=true";
     }
 
     // Método original com parâmetro (pode ser privado ou protected)
@@ -180,7 +180,8 @@ public class TarefaBean implements Serializable {
             e.printStackTrace();
         }
         this.tarefaSelecionada = null; // Limpar seleção
-        return null;
+        return "Gestao.xhtml?faces-redirect=true";
+
     }
     
     public String limparFormulario() {
